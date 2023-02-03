@@ -146,10 +146,12 @@ def cache_aes(fileinfos):
                         with open(filename) as f:
                             for line in f:
                                 geninfo += line
-                        finfo_exif[fi_info[0]] = geninfo
-                        exif_cache[fi_info[0]] = geninfo
+                        m = re.search("aesthetic_score: (\d+\.\d+)", geninfo)
+                        if m:
+                            finfo_aes[fi_info[0]] = m.group(1)
+                            aes_cache[fi_info[0]] = m.group(1)
                     except Exception:
-                        print(f"No exif for {fi_info[0]}")
+                        print(f"No EXIF in PNG or txt file when doing AES check: {fi_info[0]}")
             except SyntaxError:
                 print(f"Non-PNG file in directory when doing AES check: {fi_info[0]}")
 
@@ -186,7 +188,7 @@ def cache_exif(fileinfos):
                         finfo_exif[fi_info[0]] = geninfo
                         exif_cache[fi_info[0]] = geninfo
                     except Exception:
-                        print(f"No EXIF in PNG or txt file fpr {fi_info[0]}")
+                        print(f"No EXIF in PNG or txt file for {fi_info[0]}")
                     #print(f"{fi_info[0]} exif added: {allExif}!")
             except SyntaxError:
                 print(f"Non-PNG file in directory when doing EXIF check: {fi_info[0]}")
